@@ -1,0 +1,59 @@
+.downloads-panel-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.downloads-panel-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-surface);
+  cursor: grab;
+  transition: all var(--transition-fast);
+  border: 1px solid transparent;
+}
+
+.downloads-panel-item:hover {
+  border-color: var(--border-color);
+  background-color: var(--bg-surface-hover);
+}
+
+.downloads-panel-item:active {
+  cursor: grabbing;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 12px rgba(137, 180, 250, 0.15);
+}
+
+.downloads-panel-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(137, 180, 250, 0.1);
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
+.downloads-panel-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.downloads-panel-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.downloads-panel-drag-hint {
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.downloads-panel-item:hover .downloads-panel-drag-hint {
+  opacity: 1;
+}

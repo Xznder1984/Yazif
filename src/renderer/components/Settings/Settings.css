@@ -1,0 +1,37 @@
+.settings-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.settings-row .flex-1 {
+  flex: 1;
+}
+
+.settings-folder-preview {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+}
+
+.settings-api-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+.settings-api-row .flex-1 {
+  flex: 1;
+}
+
+.settings-api-actions {
+  display: flex;
+  gap: 6px;
+  padding-bottom: 2px;
+}
+
+.settings-save-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 8px;
+}

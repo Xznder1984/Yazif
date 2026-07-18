@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 200" width="400" height="200">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1e2e"/>
+      <stop offset="100%" style="stop-color:#313244"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#89b4fa"/>
+      <stop offset="100%" style="stop-color:#cba6f7"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="200" rx="20" fill="url(#bg)"/>
+  <circle cx="120" cy="90" r="40" fill="none" stroke="url(#accent)" stroke-width="4"/>
+  <polygon points="110,72 110,108 142,90" fill="url(#accent)"/>
+  <rect x="52" y="150" rx="4" ry="4" width="136" height="6" fill="#89b4fa" opacity="0.3"/>
+  <rect x="52" y="150" rx="4" ry="4" width="80" height="6" fill="url(#accent)"/>
+  <text x="200" y="95" font-family="system-ui, sans-serif" font-size="42" font-weight="bold" fill="#cdd6f4">Yazif</text>
+  <text x="200" y="125" font-family="system-ui, sans-serif" font-size="14" fill="#a6adc8">YouTube Downloader</text>
+</svg>

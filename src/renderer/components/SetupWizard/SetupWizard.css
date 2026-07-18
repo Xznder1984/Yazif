@@ -1,0 +1,151 @@
+.setup-wizard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.setup-card {
+  width: 560px;
+  max-height: 85vh;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-xl);
+  padding: 40px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.setup-step {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.setup-welcome {
+  align-items: center;
+  text-align: center;
+}
+
+.setup-icon-large {
+  margin-bottom: 8px;
+}
+
+.setup-welcome h1 {
+  font-size: 1.8rem;
+  background: linear-gradient(135deg, var(--accent-primary), var(--ctp-lavender));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.setup-subtitle {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.setup-desc {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.setup-step-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.setup-step-num {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent-primary), var(--ctp-lavender));
+  color: var(--ctp-crust);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.setup-path-selector {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.setup-path-selector .input-wrapper {
+  flex: 1;
+}
+
+.setup-path-preview {
+  background-color: var(--bg-surface);
+  border-radius: var(--radius-md);
+  padding: 16px;
+}
+
+.setup-tree {
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+
+.tree-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.tree-child {
+  padding-left: 24px;
+}
+
+.tree-icon {
+  font-size: 1rem;
+}
+
+.setup-api-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.setup-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+
+.setup-progress {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.setup-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--bg-surface);
+  transition: all var(--transition-fast);
+}
+
+.setup-dot-active {
+  background-color: var(--accent-primary);
+  width: 24px;
+  border-radius: 100px;
+}
+
+.setup-dot-done {
+  background-color: var(--accent-success);
+}

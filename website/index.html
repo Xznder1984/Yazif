@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yazif - YouTube Downloader</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- Nav -->
+    <nav class="nav">
+      <div class="nav-inner">
+        <a href="#" class="nav-logo">
+          <svg width="28" height="28" viewBox="0 0 128 128">
+            <defs>
+              <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#89b4fa"/>
+                <stop offset="100%" style="stop-color:#cba6f7"/>
+              </linearGradient>
+            </defs>
+            <circle cx="64" cy="58" r="32" fill="none" stroke="url(#g1)" stroke-width="5"/>
+            <polygon points="56,42 56,74 80,58" fill="url(#g1)"/>
+          </svg>
+          <span>Yazif</span>
+        </a>
+        <div class="nav-links">
+          <a href="#features">Features</a>
+          <a href="#download">Download</a>
+          <a href="https://github.com" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-badge">v1.0 — Now Available for Windows</div>
+        <h1>Download YouTube Videos<br>with <span class="hero-gradient">Yazif</span></h1>
+        <p class="hero-desc">
+          A clean, modern YouTube downloader with Catppuccin theming.
+          Download as MP4, MP3, WAV, FLAC, and more. AI-powered renaming
+          with NVIDIA NIM. Drag & drop directly into your editor.
+        </p>
+        <div class="hero-actions">
+          <a href="#download" class="btn-primary-lg">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M10 3V13M10 13L5 8M10 13L15 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M3 17H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            Download for Windows
+          </a>
+          <a href="https://github.com" class="btn-secondary-lg" target="_blank">View on GitHub</a>
+        </div>
+        <div class="hero-platforms">
+          <span class="platform-badge platform-active">Windows</span>
+          <span class="platform-badge">Linux (coming soon)</span>
+          <span class="platform-badge">macOS (coming soon)</span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card">
+          <div class="hero-card-header">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+            <span class="hero-card-title">Yazif</span>
+          </div>
+          <div class="hero-card-body">
+            <div class="hero-input-mock">
+              <span>https://youtube.com/watch?v=...</span>
+              <span class="hero-download-btn-mock">↓ Download</span>
+            </div>
+            <div class="hero-progress-mock">
+              <div class="hero-progress-bar"></div>
+            </div>
+            <div class="hero-result-mock">
+              <span class="hero-check">✓</span>
+              <span>My Awesome Video.mp4</span>
+              <span class="hero-drag-mock">⤓ Drag to CapCut</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="features">
+      <h2>Everything you need</h2>
+      <p class="section-subtitle">Powerful features in a beautiful package</p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-blue">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M12 5V19M12 19L7 14M12 19L17 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M5 21H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Multiple Formats</h3>
+          <p>Download as MP4, MKV, WebM, MP3, WAV, FLAC, OGG, M4A, Opus, and more.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-purple">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+              <path d="M12 8V12L15 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Simple & Advanced</h3>
+          <p>One-click quick downloads or full yt-dlp control with every option exposed.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-green">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M9.5 2C7.5 4 6 7 6 10C6 14 9 17 12 17C15 17 18 14 18 10C18 7 16.5 4 14.5 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 17V22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>AI-Powered Naming</h3>
+          <p>NVIDIA NIM AI renames your files with clean, descriptive names automatically.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-yellow">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="3" width="18" height="18" rx="3" stroke="currentColor" stroke-width="2"/>
+              <path d="M3 15H21" stroke="currentColor" stroke-width="2"/>
+              <path d="M9 3V15" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <h3>Drag & Drop</h3>
+          <p>Drag downloaded files directly into CapCut, Premiere, DaVinci, or any editor.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-red">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3L21 21H3L12 3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M12 10V14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="12" cy="17" r="1" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Error Reporting</h3>
+          <p>One-click error reports sent directly to the developer with a built-in template.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon feature-icon-teal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M16 4V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="11" cy="18" r="3" stroke="currentColor" stroke-width="2"/>
+              <path d="M16 4L8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Music Organizer</h3>
+          <p>Auto-organize your music files by Artist / Album / Title, like Windows Music library.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Download -->
+    <section id="download" class="download-section">
+      <h2>Download Yazif</h2>
+      <p class="section-subtitle">Free, open source, and beautiful</p>
+      <div class="download-cards">
+        <div class="download-card download-card-main">
+          <div class="download-card-platform">Windows</div>
+          <div class="download-card-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M4 8L14 6V15H4V8Z" fill="currentColor" opacity="0.8"/>
+              <path d="M15 5.5L28 3V15H15V5.5Z" fill="currentColor"/>
+              <path d="M4 16H14V25L4 23V16Z" fill="currentColor" opacity="0.8"/>
+              <path d="M15 16H28V28L15 26.5V16Z" fill="currentColor"/>
+            </svg>
+          </div>
+          <a href="#" class="btn-download-main">
+            Download Installer (.exe)
+          </a>
+          <a href="#" class="btn-download-alt">
+            Portable Version
+          </a>
+        </div>
+        <div class="download-card download-card-coming">
+          <div class="download-card-platform">Linux</div>
+          <div class="download-card-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="14" r="8" stroke="currentColor" stroke-width="2"/>
+              <circle cx="13" cy="12" r="1.5" fill="currentColor"/>
+              <circle cx="19" cy="12" r="1.5" fill="currentColor"/>
+              <path d="M12 16C13 18 19 18 20 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M10 6L8 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M22 6L24 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <span class="coming-soon-badge">Coming Soon</span>
+        </div>
+        <div class="download-card download-card-coming">
+          <div class="download-card-platform">macOS</div>
+          <div class="download-card-icon">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+              <path d="M22 17C22 21 19 24 16 24C13 24 10 21 10 17" stroke="currentColor" stroke-width="2"/>
+              <path d="M16 24V28" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M12 17C12 11 16 4 16 4C16 4 20 11 20 17" stroke="currentColor" stroke-width="2"/>
+            </svg>
+          </div>
+          <span class="coming-soon-badge">Coming Soon</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <svg width="20" height="20" viewBox="0 0 128 128">
+            <circle cx="64" cy="58" r="32" fill="none" stroke="#89b4fa" stroke-width="5"/>
+            <polygon points="56,42 56,74 80,58" fill="#89b4fa"/>
+          </svg>
+          <span>Yazif</span>
+        </div>
+        <p class="footer-text">
+          Built with Catppuccin Mocha. Powered by yt-dlp & NVIDIA NIM AI.
+        </p>
+        <div class="footer-links">
+          <a href="mailto:xander.razeralbarr@gmail.com">Contact</a>
+          <a href="https://github.com" target="_blank">GitHub</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
