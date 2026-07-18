@@ -49,7 +49,7 @@ jobs:
         with:
           tag_name: v1.0.0
           name: Yazif v1.0.0
-          files: artifacts/dist/Yazif.exe
+          files: artifacts/Yazif.exe
           draft: false
           prerelease: false
           generate_release_notes: true
