@@ -5,11 +5,11 @@ a = Analysis(
     pathex=[],
     binaries=[],
     datas=[('assets', 'assets'), ('website', 'website')],
-    hiddenimports=['mutagen', 'mutagen.mp3', 'mutagen.flac', 'mutagen.mp4'],
+    hiddenimports=['mutagen', 'mutagen.mp3', 'mutagen.flac', 'mutagen.mp4', 'mutagen.id3', 'mutagen.easyid3'],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=['tkinter', 'matplotlib', 'numpy', 'scipy', 'pandas'],
+    excludes=['tkinter', 'matplotlib', 'numpy', 'scipy', 'pandas', 'PIL'],
     noarchive=False,
 )
 
@@ -18,23 +18,19 @@ pyz = PYZ(a.pure)
 exe = EXE(
     pyz,
     a.scripts,
+    a.binaries,
+    a.datas,
     [],
-    exclude_binaries=True,
     name='Yazif',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False,
-    icon='assets/icon.ico',
-)
-
-coll = COLLECT(
-    exe,
-    a.binaries,
-    a.datas,
-    strip=False,
-    upx=True,
     upx_exclude=[],
-    name='Yazif',
+    runtime_tmpdir=None,
+    console=False,
+    disable_windowed_traceback=False,
+    icon='assets/icon.ico',
+    version='version_info.txt',
+    uac_admin=False,
 )

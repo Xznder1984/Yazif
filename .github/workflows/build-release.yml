@@ -27,18 +27,11 @@ jobs:
       - name: Build executable
         run: python build.py
 
-      - name: Create portable zip
-        run: |
-          New-Item -ItemType Directory -Path release -Force
-          Compress-Archive -Path dist\Yazif\* -DestinationPath release\Yazif-Portable.zip
-
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: yazif-windows
-          path: |
-            dist/Yazif/Yazif.exe
-            release/Yazif-Portable.zip
+          path: dist/Yazif.exe
           if-no-files-found: error
 
   release:
@@ -56,9 +49,7 @@ jobs:
         with:
           tag_name: v1.0.0
           name: Yazif v1.0.0
-          files: |
-            artifacts/dist/Yazif/Yazif.exe
-            artifacts/release/Yazif-Portable.zip
+          files: artifacts/dist/Yazif.exe
           draft: false
           prerelease: false
           generate_release_notes: true
