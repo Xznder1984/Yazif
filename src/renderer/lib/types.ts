@@ -56,7 +56,7 @@ export interface OrganizeResult {
   errors: string[];
 }
 
-export type PageId = 'simple' | 'advanced' | 'music' | 'settings' | 'downloads';
+export type PageId = 'search' | 'simple' | 'advanced' | 'music' | 'downloads' | 'settings';
 
 export interface DownloadItem {
   id: string;

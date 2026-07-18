@@ -21,6 +21,7 @@
     "@types/react-dom": "^19.0.0",
     "electron": "^43.1.1",
     "electron-builder": "^26.15.3",
+    "esbuild": "^0.25.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": "^5.7.0"
@@ -28,6 +29,7 @@
   "build": {
     "appId": "com.yazif.downloader",
     "productName": "Yazif",
+    "copyright": "Copyright © 2026 Xander",
     "directories": {
       "output": "release"
     },
@@ -37,14 +39,35 @@
     ],
     "win": {
       "target": [
-        "nsis",
-        "portable"
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
       ],
-      "icon": "website/assets/icon.ico"
+      "icon": "website/assets/icon.ico",
+      "artifactName": "Yazif-${version}-Setup.${ext}"
     },
     "nsis": {
       "oneClick": false,
-      "allowToChangeInstallationDirectory": true
+      "perMachine": false,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Yazif",
+      "installerIcon": "website/assets/icon.ico",
+      "uninstallerIcon": "website/assets/icon.ico",
+      "installerHeaderIcon": "website/assets/icon.ico",
+      "warningsAsErrors": false,
+      "include": "scripts/installer.nsh",
+      "artifactName": "Yazif-${version}-Setup.${ext}"
+    },
+    "portable": {
+      "artifactName": "Yazif-${version}-Portable.${ext}"
     }
   }
 }

@@ -2,18 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { SetupWizard } from './components/SetupWizard/SetupWizard';
 import { SimpleDownload } from './components/SimpleDownload/SimpleDownload';
 import { AdvancedDownload } from './components/AdvancedDownload/AdvancedDownload';
+import { SearchBrowser } from './components/SearchBrowser/SearchBrowser';
 import { Settings } from './components/Settings/Settings';
 import { HelpModal } from './components/HelpModal/HelpModal';
 import { MusicOrganizer } from './components/MusicOrganizer/MusicOrganizer';
 import { DownloadsPanel } from './components/DownloadsPanel/DownloadsPanel';
 import { ErrorReporter } from './components/ErrorReporter/ErrorReporter';
 import type { PageId, DownloadItem } from './lib/types';
-
-
-
-
+import './styles/catppuccin.css';
+import './styles/global.css';
+import './App.css';
 const SidebarIcon: React.FC<{ page: PageId }> = ({ page }) => {
   const icons: Record<PageId, React.ReactNode> = {
+    search: (
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+        <circle cx="8" cy="8" r="5" stroke="currentColor" strokeWidth="1.5"/>
+        <path d="M12 12L16 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+    ),
     simple: (
       <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
         <path d="M9 3V13M9 13L5 9M9 13L13 9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -52,7 +58,7 @@ const SidebarIcon: React.FC<{ page: PageId }> = ({ page }) => {
 
 export const App: React.FC = () => {
   const [setupComplete, setSetupComplete] = useState<boolean | null>(null);
-  const [currentPage, setCurrentPage] = useState<PageId>('simple');
+  const [currentPage, setCurrentPage] = useState<PageId>('search');
   const [showHelp, setShowHelp] = useState(false);
   const [showErrorReporter, setShowErrorReporter] = useState(false);
   const [recentDownloads, setRecentDownloads] = useState<DownloadItem[]>([]);
@@ -89,6 +95,7 @@ export const App: React.FC = () => {
   }
 
   const navItems: { id: PageId; label: string; section?: string }[] = [
+    { id: 'search', label: 'Search', section: 'Discover' },
     { id: 'simple', label: 'Quick Download', section: 'Download' },
     { id: 'advanced', label: 'Advanced Download' },
     { id: 'music', label: 'Music Organizer', section: 'Organize' },
@@ -98,6 +105,8 @@ export const App: React.FC = () => {
 
   const renderPage = () => {
     switch (currentPage) {
+      case 'search':
+        return <SearchBrowser />;
       case 'simple':
         return <SimpleDownload />;
       case 'advanced':
@@ -109,7 +118,7 @@ export const App: React.FC = () => {
       case 'settings':
         return <Settings />;
       default:
-        return <SimpleDownload />;
+        return <SearchBrowser />;
     }
   };
 

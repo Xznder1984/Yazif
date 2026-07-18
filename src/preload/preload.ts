@@ -6,9 +6,13 @@ export interface ElectronAPI {
   isSetupComplete: () => Promise<boolean>;
   selectDirectory: () => Promise<string | null>;
   ytdlpCheck: () => Promise<boolean>;
+  ytdlpVersion: () => Promise<string>;
+  ytdlpInstall: () => Promise<boolean>;
+  ytdlpUpdate: () => Promise<void>;
   ytdlpDownload: (options: any) => Promise<any>;
   ytdlpGetFormats: (url: string) => Promise<any>;
   ytdlpGetInfo: (url: string) => Promise<any>;
+  ytdlpSearch: (query: string) => Promise<any>;
   nvidiaRename: (title: string, description: string) => Promise<any>;
   nvidiaClassify: (title: string, description: string) => Promise<any>;
   nvidiaTestKey: (apiKey: string) => Promise<any>;
@@ -22,6 +26,7 @@ export interface ElectronAPI {
   getFilePath: (filename: string) => Promise<string>;
   onNavigate: (callback: (page: string) => void) => void;
   onShowAbout: (callback: () => void) => void;
+  onYtdlpStatus: (callback: (msg: string) => void) => void;
 }
 
 const api: ElectronAPI = {
@@ -30,9 +35,13 @@ const api: ElectronAPI = {
   isSetupComplete: () => ipcRenderer.invoke('is-setup-complete'),
   selectDirectory: () => ipcRenderer.invoke('select-directory'),
   ytdlpCheck: () => ipcRenderer.invoke('ytdlp-check'),
+  ytdlpVersion: () => ipcRenderer.invoke('ytdlp-version'),
+  ytdlpInstall: () => ipcRenderer.invoke('ytdlp-install'),
+  ytdlpUpdate: () => ipcRenderer.invoke('ytdlp-update'),
   ytdlpDownload: (options) => ipcRenderer.invoke('ytdlp-download', options),
   ytdlpGetFormats: (url) => ipcRenderer.invoke('ytdlp-get-formats', url),
   ytdlpGetInfo: (url) => ipcRenderer.invoke('ytdlp-get-info', url),
+  ytdlpSearch: (query) => ipcRenderer.invoke('ytdlp-search', query),
   nvidiaRename: (title, description) => ipcRenderer.invoke('nvidia-rename', title, description),
   nvidiaClassify: (title, description) => ipcRenderer.invoke('nvidia-classify', title, description),
   nvidiaTestKey: (apiKey) => ipcRenderer.invoke('nvidia-test-key', apiKey),
@@ -46,6 +55,7 @@ const api: ElectronAPI = {
   getFilePath: (filename) => ipcRenderer.invoke('get-file-path', filename),
   onNavigate: (callback) => ipcRenderer.on('navigate', (_event, page) => callback(page)),
   onShowAbout: (callback) => ipcRenderer.on('show-about', () => callback()),
+  onYtdlpStatus: (callback) => ipcRenderer.on('ytdlp-status', (_event, msg) => callback(msg)),
 };
 
 contextBridge.exposeInMainWorld('electronAPI', api);

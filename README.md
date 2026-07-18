@@ -4,6 +4,7 @@ A clean, modern YouTube downloader with Catppuccin Mocha theming.
 
 ## Features
 
+- **Search & Download**: Search YouTube directly in the app, preview results, and download instantly
 - **Multiple Formats**: MP4, MKV, WebM, AVI, MP3, WAV, FLAC, OGG, M4A, Opus
 - **Simple & Advanced Modes**: Quick one-click downloads or full yt-dlp control
 - **AI-Powered Naming**: NVIDIA NIM renames files with clean, descriptive names
@@ -17,7 +18,7 @@ A clean, modern YouTube downloader with Catppuccin Mocha theming.
 
 - Windows 10+ (Linux/macOS coming soon)
 - Node.js v22+
-- yt-dlp (auto-detected, install via `pip install yt-dlp`)
+- yt-dlp — **auto-installed** on first run (via choco, winget, pip, or GitHub binary)
 - ffmpeg (for post-processing, auto-detected from PATH)
 - NVIDIA NIM API key (optional, for AI features — get free at build.nvidia.com)
 
@@ -34,7 +35,7 @@ npm run dev
 npm run build:win
 ```
 
-Outputs to `release/` folder.
+Outputs installer + portable `.exe` to `release/` folder.
 
 ## Configuration
 
@@ -46,13 +47,23 @@ The app stores config in:
 
 | Layer | Technology |
 |-------|-----------|
-| Desktop | Electron 33 + React 19 + TypeScript |
+| Desktop | Electron 43 + React 19 + TypeScript |
 | Styling | Custom CSS (Catppuccin Mocha palette) |
-| Downloader | yt-dlp (subprocess) |
+| Downloader | yt-dlp (subprocess, auto-installs) |
 | AI | NVIDIA NIM API (llama-3.1-8b-instruct) |
 | Audio Processing | ffmpeg |
 | Music Metadata | music-metadata |
-| Website | Static HTML/CSS/JS |
+| Website | Static HTML/CSS/JS (GitHub Pages) |
+
+## Release
+
+```bash
+# Tag and push to trigger build + release workflow
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+This triggers GitHub Actions to build the Windows installer and create a GitHub Release.
 
 ## License
 

@@ -97,19 +97,22 @@ function createWindow(): void {
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
-    minWidth: 900,
-    minHeight: 600,
+    minWidth: 1200,
+    minHeight: 800,
+    maxWidth: 1200,
+    maxHeight: 800,
+    resizable: false,
     title: 'Yazif',
     backgroundColor: '#1e1e2e',
     titleBarStyle: 'default',
+    icon: path.join(__dirname, '..', 'assets', 'icon.ico'),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, '..', 'preload', 'preload.js'),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
     },
     show: false,
-    icon: path.join(__dirname, '..', '..', 'website', 'assets', 'icon.png'),
   });
 
   mainWindow.loadFile(path.join(__dirname, '..', 'renderer', 'index.html'));
@@ -189,6 +192,14 @@ function setupIPC(): void {
 
   // yt-dlp operations
   ipcMain.handle('ytdlp-check', async () => ytdlp.isAvailable());
+  ipcMain.handle('ytdlp-version', async () => ytdlp.getVersion());
+  ipcMain.handle('ytdlp-install', async () => ytdlp.installYtdlp());
+  ipcMain.handle('ytdlp-update', async () => ytdlp.checkAndUpdate());
+
+  // Forward yt-dlp status events to renderer
+  ytdlp.on('status', (msg: string) => {
+    mainWindow?.webContents.send('ytdlp-status', msg);
+  });
 
   ipcMain.handle('ytdlp-download', async (_event, options: DownloadOptions) => {
     const cfg = loadConfig();
@@ -206,6 +217,10 @@ function setupIPC(): void {
 
   ipcMain.handle('ytdlp-get-info', async (_event, url: string) => {
     return ytdlp.getVideoInfo(url);
+  });
+
+  ipcMain.handle('ytdlp-search', async (_event, query: string) => {
+    return ytdlp.search(query);
   });
 
   // NVIDIA AI

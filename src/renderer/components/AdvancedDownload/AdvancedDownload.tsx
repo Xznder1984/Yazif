@@ -3,6 +3,7 @@ import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Dropdown } from '../common/Dropdown';
 import { ProgressBar } from '../common/ProgressBar';
+import './AdvancedDownload.css';
 
 
 const FORMAT_OPTIONS = [

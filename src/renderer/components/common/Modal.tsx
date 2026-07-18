@@ -1,4 +1,5 @@
 import React, { useEffect, useCallback } from 'react';
+import './Modal.css';
 
 
 interface ModalProps {

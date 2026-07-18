@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import './DropZone.css';
 
 
 interface DropZoneProps {
