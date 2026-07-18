@@ -32,8 +32,11 @@ jobs:
           New-Item -ItemType Directory -Path release -Force
           Compress-Archive -Path dist\Yazif.exe -DestinationPath release\Yazif-Portable.zip
 
+      - name: Install NSIS
+        run: choco install nsis -y --allow-empty-checksums
+
       - name: Build NSIS installer
-        run: makensis installer.nsi
+        run: & "${env:ProgramFiles(x86)}\NSIS\makensis.exe" installer.nsi
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
