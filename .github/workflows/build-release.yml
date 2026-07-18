@@ -28,7 +28,9 @@ jobs:
         run: python build.py
 
       - name: Create portable zip
-        run: Compress-Archive -Path dist\Yazif\* -DestinationPath release\Yazif-Portable.zip
+        run: |
+          New-Item -ItemType Directory -Path release -Force
+          Compress-Archive -Path dist\Yazif\* -DestinationPath release\Yazif-Portable.zip
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -43,29 +45,17 @@ jobs:
     needs: build-windows
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
           merge-multiple: true
 
-      - name: Get version
-        id: version
-        run: echo "version=$(python -c "import re; print(re.search(r\"version='(.+?)'\", open('main.py').read()).group(1))")" >> "$GITHUB_OUTPUT"
-
-      - name: Delete existing release
-        run: gh release delete "v${{ steps.version.outputs.version }}" --yes --cleanup-tag || true
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ steps.version.outputs.version }}
-          name: Yazif v${{ steps.version.outputs.version }}
+          tag_name: v1.0.0
+          name: Yazif v1.0.0
           files: |
             artifacts/dist/Yazif/Yazif.exe
             artifacts/release/Yazif-Portable.zip
