@@ -44,8 +44,11 @@ jobs:
         run: |
           $cert = [System.Convert]::FromBase64String("${{ secrets.CODESIGN_CERT }}")
           [System.IO.File]::WriteAllBytes("$env:RUNNER_TEMP\cert.pfx", $cert)
-          & signtool sign /f "$env:RUNNER_TEMP\cert.pfx" /p "${{ secrets.CODESIGN_PASS }}" /tr http://timestamp.digicert.com /td sha256 /fd sha256 /d "Yazif" /du "https://github.com/Xznder1984/Yazif" .\Yazif.exe
-          & signtool sign /f "$env:RUNNER_TEMP\cert.pfx" /p "${{ secrets.CODESIGN_PASS }}" /tr http://timestamp.digicert.com /td sha256 /fd sha256 /d "Yazif" /du "https://github.com/Xznder1984/Yazif" .\Yazif-Setup.exe
+          $pwd = "${{ secrets.CODESIGN_PASS }}"
+          $securePwd = ConvertTo-SecureString -String $pwd -Force -AsPlainText
+          $certObj = New-Object System.Security.Cryptography.X509Certificates.X509Certificate2("$env:RUNNER_TEMP\cert.pfx", $securePwd)
+          Set-AuthenticodeSignature -FilePath .\Yazif.exe -Certificate $certObj -TimestampServer http://timestamp.digicert.com -HashAlgorithm SHA256
+          Set-AuthenticodeSignature -FilePath .\Yazif-Setup.exe -Certificate $certObj -TimestampServer http://timestamp.digicert.com -HashAlgorithm SHA256
           Remove-Item "$env:RUNNER_TEMP\cert.pfx"
 
       - name: Upload artifacts
