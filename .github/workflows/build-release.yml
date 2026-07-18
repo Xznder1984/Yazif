@@ -1,4 +1,4 @@
-name: Build & Release Electron App
+name: Build & Release Python App
 
 on:
   push:
@@ -15,43 +15,48 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          node-version: 22
-          cache: 'npm'
+          python-version: '3.12'
+          cache: 'pip'
 
       - name: Install dependencies
-        run: npm install
+        run: pip install -r requirements.txt pyinstaller
 
-      - name: Build app
-        run: npm run build
+      - name: Build executable
+        run: python build.py
 
-      - name: Build Windows installer + portable
-        run: npx electron-builder --win
+      - name: Create portable zip
+        run: Compress-Archive -Path dist\Yazif\* -DestinationPath release\Yazif-Portable.zip
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: yazif-windows
-          path: release/*.exe
+          path: |
+            dist/Yazif/Yazif.exe
+            release/Yazif-Portable.zip
           if-no-files-found: error
 
   release:
     needs: build-windows
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Download artifacts
         uses: actions/download-artifact@v4
         with:
           path: artifacts
           merge-multiple: true
 
-      - name: Get version from package.json
+      - name: Get version
         id: version
-        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+        run: echo "version=$(python -c "import re; print(re.search(r\"version='(.+?)'\", open('main.py').read()).group(1))")" >> "$GITHUB_OUTPUT"
 
-      - name: Delete existing release if any
+      - name: Delete existing release
         run: gh release delete "v${{ steps.version.outputs.version }}" --yes --cleanup-tag || true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -61,7 +66,9 @@ jobs:
         with:
           tag_name: v${{ steps.version.outputs.version }}
           name: Yazif v${{ steps.version.outputs.version }}
-          files: artifacts/*.exe
+          files: |
+            artifacts/dist/Yazif/Yazif.exe
+            artifacts/release/Yazif-Portable.zip
           draft: false
           prerelease: false
           generate_release_notes: true

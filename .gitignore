@@ -1,7 +1,15 @@
 node_modules/
 dist/
 release/
+build/
+__pycache__/
+*.pyc
+*.pyo
+*.spec.bak
 .env
 *.log
 .DS_Store
 Thumbs.db
+*.egg-info/
+.venv/
+venv/
