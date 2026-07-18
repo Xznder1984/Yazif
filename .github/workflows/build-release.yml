@@ -31,6 +31,8 @@ jobs:
         run: |
           New-Item -ItemType Directory -Path release -Force
           Compress-Archive -Path dist\Yazif.exe -DestinationPath release\Yazif-Portable.zip
+          Copy-Item release\Yazif-Portable.zip .
+          Copy-Item dist\Yazif.exe .
 
       - name: Install NSIS
         run: choco install nsis -y --allow-empty-checksums
@@ -43,8 +45,8 @@ jobs:
         with:
           name: yazif-windows
           path: |
-            dist/Yazif.exe
-            release/Yazif-Portable.zip
+            Yazif.exe
+            Yazif-Portable.zip
             Yazif-Setup.exe
           if-no-files-found: error
 
