@@ -40,6 +40,14 @@ jobs:
       - name: Build NSIS installer
         run: cmd /c "C:\Program Files (x86)\NSIS\makensis.exe" installer.nsi
 
+      - name: Sign executables
+        run: |
+          $cert = [System.Convert]::FromBase64String("${{ secrets.CODESIGN_CERT }}")
+          [System.IO.File]::WriteAllBytes("$env:RUNNER_TEMP\cert.pfx", $cert)
+          & signtool sign /f "$env:RUNNER_TEMP\cert.pfx" /p "${{ secrets.CODESIGN_PASS }}" /tr http://timestamp.digicert.com /td sha256 /fd sha256 /d "Yazif" /du "https://github.com/Xznder1984/Yazif" .\Yazif.exe
+          & signtool sign /f "$env:RUNNER_TEMP\cert.pfx" /p "${{ secrets.CODESIGN_PASS }}" /tr http://timestamp.digicert.com /td sha256 /fd sha256 /d "Yazif" /du "https://github.com/Xznder1984/Yazif" .\Yazif-Setup.exe
+          Remove-Item "$env:RUNNER_TEMP\cert.pfx"
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:

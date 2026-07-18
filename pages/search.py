@@ -1,12 +1,28 @@
 from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLineEdit, QPushButton,
-    QLabel, QScrollArea, QFrame, QGridLayout, QSizePolicy,
+    QLabel, QScrollArea, QFrame, QSizePolicy,
 )
-from PyQt6.QtCore import Qt, pyqtSignal, QSize
+from PyQt6.QtCore import Qt, pyqtSignal, QThread
 from PyQt6.QtGui import QPixmap
 import urllib.request
-from io import BytesIO
 from core.downloader import SearchThread, find_ytdlp
+
+
+class ThumbLoader(QThread):
+    loaded = pyqtSignal(QPixmap)
+
+    def __init__(self, url: str):
+        super().__init__()
+        self.url = url
+
+    def run(self):
+        try:
+            data = urllib.request.urlopen(self.url, timeout=5).read()
+            pix = QPixmap()
+            pix.loadFromData(data)
+            self.loaded.emit(pix)
+        except Exception:
+            pass
 
 
 class SearchResultCard(QFrame):
@@ -16,46 +32,53 @@ class SearchResultCard(QFrame):
         super().__init__(parent)
         self.item = item
         self.setObjectName("card")
-        self.setFixedHeight(100)
+        self.setFixedHeight(110)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(12, 8, 12, 8)
-        layout.setSpacing(12)
+        layout.setContentsMargins(14, 10, 14, 10)
+        layout.setSpacing(14)
 
         self.thumb = QLabel()
-        self.thumb.setFixedSize(80, 60)
-        self.thumb.setStyleSheet("border-radius: 6px; background: #313244;")
+        self.thumb.setFixedSize(112, 68)
+        self.thumb.setStyleSheet(
+            "border-radius: 8px; background: #313244; font-size: 11px; color: #6c7086;"
+        )
         self.thumb.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.thumb.setText("...")
         layout.addWidget(self.thumb)
 
         info = QVBoxLayout()
-        info.setSpacing(4)
+        info.setSpacing(3)
+        info.setContentsMargins(0, 2, 0, 2)
 
         title = item.get("title", "Unknown")
-        if len(title) > 70:
-            title = title[:70] + "..."
+        if len(title) > 65:
+            title = title[:65] + "..."
         self.title_label = QLabel(title)
-        self.title_label.setStyleSheet("font-weight: bold; font-size: 13px;")
+        self.title_label.setStyleSheet("font-weight: 700; font-size: 14px; color: #cdd6f4;")
         self.title_label.setWordWrap(False)
         info.addWidget(self.title_label)
 
-        channel = item.get("channel", item.get("uploader", "Unknown"))
+        channel = item.get("channel", item.get("uploader", ""))
         self.channel_label = QLabel(channel)
-        self.channel_label.setObjectName("subheading")
+        self.channel_label.setStyleSheet("font-size: 12px; color: #a6adc8;")
         info.addWidget(self.channel_label)
 
-        duration = item.get("duration_string", item.get("duration", ""))
-        url = item.get("url", item.get("id", ""))
-        self.meta_label = QLabel(f"{duration}  •  {url[:40]}")
-        self.meta_label.setObjectName("muted")
+        duration = item.get("duration_string", "")
+        views = item.get("view_count")
+        view_str = f"{views:,} views" if views else ""
+        meta_parts = [p for p in [duration, view_str] if p]
+        self.meta_label = QLabel("  ·  ".join(meta_parts))
+        self.meta_label.setStyleSheet("font-size: 11px; color: #7f849c;")
         info.addWidget(self.meta_label)
 
+        info.addStretch()
         layout.addLayout(info, 1)
 
-        dl_btn = QPushButton("Download")
-        dl_btn.setFixedWidth(90)
+        dl_btn = QPushButton("  Download  ")
+        dl_btn.setFixedSize(100, 36)
+        dl_btn.setCursor(Qt.CursorShape.PointingHandCursor)
         dl_btn.clicked.connect(lambda: self.download_clicked.emit(self.item))
         layout.addWidget(dl_btn, alignment=Qt.AlignmentFlag.AlignVCenter)
 
@@ -63,15 +86,17 @@ class SearchResultCard(QFrame):
 
     def _load_thumb(self, url: str):
         if not url:
-            self.thumb.setText("No img")
+            self.thumb.setText("N/A")
             return
-        try:
-            data = urllib.request.urlopen(url, timeout=5).read()
-            pix = QPixmap()
-            pix.loadFromData(data)
-            self.thumb.setPixmap(pix.scaled(80, 60, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
-        except Exception:
-            self.thumb.setText("No img")
+        self._loader = ThumbLoader(url)
+        self._loader.loaded.connect(self._set_thumb)
+        self._loader.start()
+
+    def _set_thumb(self, pix: QPixmap):
+        self.thumb.setPixmap(
+            pix.scaled(112, 68, Qt.AspectRatioMode.KeepAspectRatio,
+                       Qt.TransformationMode.SmoothTransformation)
+        )
 
 
 class SearchPage(QWidget):
@@ -83,26 +108,30 @@ class SearchPage(QWidget):
         self.ytdlp = find_ytdlp()
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(24, 24, 24, 24)
+        layout.setContentsMargins(28, 28, 28, 28)
         layout.setSpacing(16)
 
         title = QLabel("Search YouTube")
         title.setObjectName("heading")
         layout.addWidget(title)
 
-        desc = QLabel("Find and download videos directly from YouTube")
+        desc = QLabel("Find and download videos, music, tutorials and more")
         desc.setObjectName("subheading")
         layout.addWidget(desc)
 
+        layout.addSpacing(4)
+
         search_bar = QHBoxLayout()
-        search_bar.setSpacing(8)
+        search_bar.setSpacing(10)
         self.search_input = QLineEdit()
-        self.search_input.setPlaceholderText("Search for videos, music, tutorials...")
+        self.search_input.setPlaceholderText("  🔍  Search for videos, music, tutorials...")
+        self.search_input.setFixedHeight(44)
         self.search_input.returnPressed.connect(self._do_search)
         search_bar.addWidget(self.search_input)
 
-        self.search_btn = QPushButton("Search")
-        self.search_btn.setFixedWidth(100)
+        self.search_btn = QPushButton("  Search  ")
+        self.search_btn.setFixedWidth(110)
+        self.search_btn.setFixedHeight(44)
         self.search_btn.clicked.connect(self._do_search)
         search_bar.addWidget(self.search_btn)
         layout.addLayout(search_bar)
@@ -118,15 +147,15 @@ class SearchPage(QWidget):
 
         self.results_widget = QWidget()
         self.results_layout = QVBoxLayout(self.results_widget)
-        self.results_layout.setContentsMargins(8, 8, 8, 8)
-        self.results_layout.setSpacing(8)
+        self.results_layout.setContentsMargins(10, 10, 10, 10)
+        self.results_layout.setSpacing(10)
         self.results_layout.addStretch()
 
-        placeholder = QLabel("Search above to find videos")
-        placeholder.setObjectName("subheading")
-        placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.results_layout.insertWidget(0, placeholder)
-        self.placeholder = placeholder
+        self.placeholder = QLabel("  Search above to find videos  ")
+        self.placeholder.setObjectName("subheading")
+        self.placeholder.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.placeholder.setFixedHeight(120)
+        self.results_layout.insertWidget(0, self.placeholder)
 
         scroll.setWidget(self.results_widget)
         layout.addWidget(scroll, 1)
@@ -136,8 +165,8 @@ class SearchPage(QWidget):
         if not query:
             return
         self.search_btn.setEnabled(False)
-        self.search_btn.setText("...")
-        self.status_label.setText("Searching...")
+        self.search_btn.setText(" ... ")
+        self.status_label.setText("Searching YouTube...")
         self._clear_results()
 
         self.search_thread = SearchThread(query, self.ytdlp)
@@ -147,7 +176,7 @@ class SearchPage(QWidget):
 
     def _on_results(self, items: list):
         self.search_btn.setEnabled(True)
-        self.search_btn.setText("Search")
+        self.search_btn.setText("  Search  ")
         if not items:
             self.status_label.setText("No results found")
             return
@@ -160,14 +189,12 @@ class SearchPage(QWidget):
 
     def _on_error(self, err: str):
         self.search_btn.setEnabled(True)
-        self.search_btn.setText("Search")
+        self.search_btn.setText("  Search  ")
         self.status_label.setText(f"Error: {err}")
 
     def _on_card_download(self, item: dict):
-        url = item.get("url", "")
-        if not url:
-            vid = item.get("id", "")
-            url = f"https://www.youtube.com/watch?v={vid}"
+        vid = item.get("id", "")
+        url = item.get("url", "") or f"https://www.youtube.com/watch?v={vid}"
         self.download_requested.emit(url)
 
     def _clear_results(self):
@@ -176,5 +203,4 @@ class SearchPage(QWidget):
             w = item.widget()
             if w:
                 w.deleteLater()
-        if self.placeholder:
-            self.placeholder = None
+        self.placeholder = None

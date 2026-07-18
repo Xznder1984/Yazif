@@ -6,7 +6,6 @@ from PyQt6.QtCore import Qt, pyqtSignal
 from core.downloader import DownloadThread, find_ytdlp
 from core.config import load_config
 
-
 AUDIO_FORMATS = ["mp3", "wav", "flac", "ogg", "m4a"]
 VIDEO_FORMATS = ["mp4", "mkv", "webm", "avi"]
 
@@ -22,84 +21,102 @@ class SimpleDownloadPage(QWidget):
         self.ytdlp = find_ytdlp()
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(24, 24, 24, 24)
+        layout.setContentsMargins(28, 28, 28, 28)
         layout.setSpacing(16)
 
         title = QLabel("Quick Download")
         title.setObjectName("heading")
         layout.addWidget(title)
 
-        desc = QLabel("Paste a URL or drag a file here to download")
+        desc = QLabel("Paste a URL and choose your format")
         desc.setObjectName("subheading")
         layout.addWidget(desc)
 
+        layout.addSpacing(4)
+
         url_row = QHBoxLayout()
-        url_row.setSpacing(8)
+        url_row.setSpacing(10)
         self.url_input = QLineEdit()
-        self.url_input.setPlaceholderText("https://www.youtube.com/watch?v=...")
+        self.url_input.setPlaceholderText("  https://www.youtube.com/watch?v=...")
+        self.url_input.setFixedHeight(44)
         self.url_input.returnPressed.connect(self._start_download)
         url_row.addWidget(self.url_input)
 
-        self.dl_btn = QPushButton("Download")
-        self.dl_btn.setFixedWidth(110)
+        self.dl_btn = QPushButton("  Download  ")
+        self.dl_btn.setFixedWidth(130)
+        self.dl_btn.setFixedHeight(44)
         self.dl_btn.clicked.connect(self._start_download)
         url_row.addWidget(self.dl_btn)
         layout.addLayout(url_row)
 
+        layout.addSpacing(4)
+
         opt_row = QHBoxLayout()
         opt_row.setSpacing(12)
 
-        type_frame = QFrame()
-        type_frame.setObjectName("card")
-        type_layout = QHBoxLayout(type_frame)
-        type_layout.setContentsMargins(12, 8, 12, 8)
-        type_layout.setSpacing(8)
+        type_card = QFrame()
+        type_card.setObjectName("card")
+        tc_layout = QHBoxLayout(type_card)
+        tc_layout.setContentsMargins(14, 10, 14, 10)
+        tc_layout.setSpacing(10)
 
-        type_layout.addWidget(QLabel("Type:"))
+        tc_layout.addWidget(QLabel("Type:"))
         self.type_combo = QComboBox()
         self.type_combo.addItems(["Audio", "Video"])
+        self.type_combo.setFixedHeight(34)
         self.type_combo.currentTextChanged.connect(self._update_formats)
-        type_layout.addWidget(self.type_combo)
+        tc_layout.addWidget(self.type_combo)
 
-        type_layout.addWidget(QLabel("Format:"))
+        tc_layout.addWidget(QLabel("Format:"))
         self.format_combo = QComboBox()
-        type_layout.addWidget(self.format_combo)
+        self.format_combo.setFixedHeight(34)
+        tc_layout.addWidget(self.format_combo)
 
-        opt_row.addWidget(type_frame)
+        opt_row.addWidget(type_card)
 
-        quality_frame = QFrame()
-        quality_frame.setObjectName("card")
-        quality_layout = QHBoxLayout(quality_frame)
-        quality_layout.setContentsMargins(12, 8, 12, 8)
-        quality_layout.setSpacing(8)
+        qual_card = QFrame()
+        qual_card.setObjectName("card")
+        qc_layout = QHBoxLayout(qual_card)
+        qc_layout.setContentsMargins(14, 10, 14, 10)
+        qc_layout.setSpacing(10)
 
-        quality_layout.addWidget(QLabel("Quality:"))
+        qc_layout.addWidget(QLabel("Quality:"))
         self.quality_combo = QComboBox()
         self.quality_combo.addItems(["Best", "192 kbps", "128 kbps", "64 kbps"])
-        quality_layout.addWidget(self.quality_combo)
+        self.quality_combo.setFixedHeight(34)
+        qc_layout.addWidget(self.quality_combo)
 
-        opt_row.addWidget(quality_frame)
+        opt_row.addWidget(qual_card)
         opt_row.addStretch()
         layout.addLayout(opt_row)
 
+        layout.addSpacing(4)
+
         out_row = QHBoxLayout()
-        out_row.setSpacing(8)
-        out_row.addWidget(QLabel("Save to:"))
+        out_row.setSpacing(10)
+        out_label = QLabel("Save to:")
+        out_label.setStyleSheet("font-weight: 600;")
+        out_row.addWidget(out_label)
+
         self.path_input = QLineEdit()
         self.path_input.setText(self.cfg.get("download_path", ""))
         self.path_input.setReadOnly(True)
+        self.path_input.setFixedHeight(38)
         out_row.addWidget(self.path_input, 1)
 
         browse_btn = QPushButton("Browse")
         browse_btn.setObjectName("secondaryBtn")
         browse_btn.setFixedWidth(80)
+        browse_btn.setFixedHeight(38)
         browse_btn.clicked.connect(self._browse_folder)
         out_row.addWidget(browse_btn)
         layout.addLayout(out_row)
 
+        layout.addSpacing(8)
+
         self.progress_bar = QProgressBar()
         self.progress_bar.setValue(0)
-        self.progress_bar.setFixedHeight(8)
+        self.progress_bar.setFixedHeight(10)
         layout.addWidget(self.progress_bar)
 
         self.status_label = QLabel("Ready")
@@ -107,7 +124,6 @@ class SimpleDownloadPage(QWidget):
         layout.addWidget(self.status_label)
 
         layout.addStretch()
-
         self._update_formats("Audio")
 
     def _update_formats(self, type_text: str):
@@ -128,7 +144,6 @@ class SimpleDownloadPage(QWidget):
         if not url:
             self.status_label.setText("Please enter a URL")
             return
-
         out_dir = self.path_input.text().strip()
         if not out_dir:
             self.status_label.setText("Please select a download folder")
@@ -141,7 +156,7 @@ class SimpleDownloadPage(QWidget):
             opts["audio_quality"] = quality.split()[0] if "kbps" in quality else "192"
 
         self.dl_btn.setEnabled(False)
-        self.dl_btn.setText("Downloading...")
+        self.dl_btn.setText(" ... ")
         self.progress_bar.setValue(0)
         self.status_label.setText("Starting download...")
         self.download_started.emit(url)
@@ -161,14 +176,14 @@ class SimpleDownloadPage(QWidget):
 
     def _on_done(self, info: dict):
         self.dl_btn.setEnabled(True)
-        self.dl_btn.setText("Download")
+        self.dl_btn.setText("  Download  ")
         self.progress_bar.setValue(100)
         self.status_label.setText("Download complete!")
         self.download_finished.emit(info)
 
     def _on_error(self, err: str):
         self.dl_btn.setEnabled(True)
-        self.dl_btn.setText("Download")
+        self.dl_btn.setText("  Download  ")
         self.progress_bar.setValue(0)
         self.status_label.setText(f"Error: {err}")
 

@@ -30,54 +30,103 @@ CATPPUCCIN = {
 C = CATPPUCCIN
 
 QSS = f"""
-QMainWindow, QWidget {{
+/* ============================================================
+   BASE
+   ============================================================ */
+QMainWindow {{
     background-color: {C['base']};
+}}
+
+QWidget {{
+    background-color: transparent;
     color: {C['text']};
-    font-family: 'Segoe UI', sans-serif;
+    font-family: 'Segoe UI', 'Inter', sans-serif;
     font-size: 13px;
 }}
 
-/* Sidebar */
+/* ============================================================
+   SIDEBAR
+   ============================================================ */
 #sidebar {{
-    background-color: {C['mantle']};
+    background-color: {C['crust']};
     border-right: 1px solid {C['surface0']};
+}}
+
+#sidebarTitle {{
+    color: {C['mauve']};
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    padding: 20px 16px 12px 16px;
+}}
+
+#sidebarVersion {{
+    color: {C['overlay0']};
+    font-size: 11px;
+    padding: 0 16px 8px 16px;
+}}
+
+#sidebarSeparator {{
+    background-color: {C['surface0']};
+    max-height: 1px;
+    min-height: 1px;
+    margin: 4px 12px;
 }}
 
 #sidebar QPushButton {{
     background: transparent;
-    color: {C['subtext0']};
+    color: {C['overlay1']};
     border: none;
     border-radius: 8px;
-    padding: 10px 16px;
+    padding: 10px 14px;
     text-align: left;
     font-size: 13px;
+    font-weight: 500;
+    margin: 1px 4px;
 }}
 
 #sidebar QPushButton:hover {{
     background-color: {C['surface0']};
-    color: {C['text']};
+    color: {C['subtext1']};
 }}
 
 #sidebar QPushButton:checked {{
     background-color: {C['surface0']};
     color: {C['mauve']};
+    font-weight: 600;
 }}
 
-#sidebarTitle {{
-    color: {C['mauve']};
-    font-size: 18px;
-    font-weight: bold;
-    padding: 16px;
+/* ============================================================
+   PAGE HEADERS
+   ============================================================ */
+#heading {{
+    font-size: 24px;
+    font-weight: 700;
+    color: {C['text']};
+    letter-spacing: -0.3px;
 }}
 
-/* Buttons */
+#subheading {{
+    font-size: 14px;
+    color: {C['subtext0']};
+    font-weight: 400;
+}}
+
+#muted {{
+    color: {C['overlay1']};
+    font-size: 12px;
+}}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
 QPushButton {{
     background-color: {C['mauve']};
     color: {C['crust']};
     border: none;
     border-radius: 8px;
-    padding: 10px 20px;
-    font-weight: bold;
+    padding: 10px 22px;
+    font-weight: 700;
     font-size: 13px;
 }}
 
@@ -87,6 +136,7 @@ QPushButton:hover {{
 
 QPushButton:pressed {{
     background-color: {C['blue']};
+    padding: 11px 21px 9px 23px;
 }}
 
 QPushButton:disabled {{
@@ -96,104 +146,139 @@ QPushButton:disabled {{
 
 #secondaryBtn {{
     background-color: {C['surface0']};
-    color: {C['text']};
-    border: 1px solid {C['surface2']};
+    color: {C['subtext1']};
+    border: 1px solid {C['surface1']};
+    font-weight: 500;
 }}
 
 #secondaryBtn:hover {{
     background-color: {C['surface1']};
-    border-color: {C['overlay1']};
+    color: {C['text']};
+    border-color: {C['surface2']};
 }}
 
-/* Inputs */
-QLineEdit, QSpinBox, QComboBox {{
+#ghostBtn {{
+    background: transparent;
+    color: {C['subtext0']};
+    border: none;
+    font-weight: 500;
+}}
+
+#ghostBtn:hover {{
+    color: {C['text']};
+    background: {C['surface0']};
+}}
+
+/* ============================================================
+   INPUTS
+   ============================================================ */
+QLineEdit, QSpinBox {{
     background-color: {C['surface0']};
     color: {C['text']};
-    border: 1px solid {C['surface2']};
+    border: 2px solid {C['surface1']};
     border-radius: 8px;
-    padding: 8px 12px;
+    padding: 10px 14px;
     font-size: 13px;
     selection-background-color: {C['mauve']};
+    selection-color: {C['crust']};
 }}
 
-QLineEdit:focus, QSpinBox:focus, QComboBox:focus {{
+QLineEdit:hover, QSpinBox:hover {{
+    border-color: {C['surface2']};
+}}
+
+QLineEdit:focus, QSpinBox:focus {{
+    border-color: {C['mauve']};
+}}
+
+QComboBox {{
+    background-color: {C['surface0']};
+    color: {C['text']};
+    border: 2px solid {C['surface1']};
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+}}
+
+QComboBox:hover {{
+    border-color: {C['surface2']};
+}}
+
+QComboBox:focus {{
     border-color: {C['mauve']};
 }}
 
 QComboBox::drop-down {{
     border: none;
-    padding-right: 8px;
+    padding-right: 10px;
+    width: 20px;
+}}
+
+QComboBox::down-arrow {{
+    image: none;
+    border: none;
 }}
 
 QComboBox QAbstractItemView {{
     background-color: {C['surface0']};
     color: {C['text']};
     border: 1px solid {C['surface2']};
+    border-radius: 8px;
+    padding: 4px;
     selection-background-color: {C['mauve']};
     selection-color: {C['crust']};
+    outline: none;
 }}
 
 QTextEdit {{
     background-color: {C['surface0']};
     color: {C['text']};
-    border: 1px solid {C['surface2']};
+    border: 2px solid {C['surface1']};
     border-radius: 8px;
-    padding: 8px 12px;
-    font-family: 'Cascadia Code', 'Consolas', monospace;
+    padding: 10px 14px;
+    font-family: 'Cascadia Code', 'Consolas', 'Fira Code', monospace;
     font-size: 12px;
+    selection-background-color: {C['mauve']};
 }}
 
 QTextEdit:focus {{
     border-color: {C['mauve']};
 }}
 
-/* Labels */
-QLabel {{
-    color: {C['text']};
-}}
-
-#heading {{
-    font-size: 22px;
-    font-weight: bold;
-    color: {C['text']};
-}}
-
-#subheading {{
-    font-size: 14px;
-    color: {C['subtext0']};
-}}
-
-#muted {{
-    color: {C['overlay1']};
-    font-size: 12px;
-}}
-
-/* Progress bar */
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
 QProgressBar {{
     background-color: {C['surface0']};
     border: none;
-    border-radius: 4px;
-    height: 8px;
+    border-radius: 5px;
+    max-height: 10px;
+    min-height: 10px;
     text-align: center;
     color: transparent;
 }}
 
 QProgressBar::chunk {{
-    background-color: {C['mauve']};
-    border-radius: 4px;
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,
+        stop:0 {C['mauve']}, stop:1 {C['lavender']});
+    border-radius: 5px;
 }}
 
-/* Scroll bar */
+/* ============================================================
+   SCROLL BARS
+   ============================================================ */
 QScrollBar:vertical {{
     background: transparent;
-    width: 8px;
+    width: 10px;
     margin: 0;
+    border-radius: 5px;
 }}
 
 QScrollBar::handle:vertical {{
     background: {C['surface2']};
-    border-radius: 4px;
+    border-radius: 5px;
     min-height: 30px;
+    margin: 2px;
 }}
 
 QScrollBar::handle:vertical:hover {{
@@ -202,13 +287,43 @@ QScrollBar::handle:vertical:hover {{
 
 QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {{
     height: 0;
+    background: none;
 }}
 
 QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
     background: transparent;
 }}
 
-/* Cards / Panels */
+QScrollBar:horizontal {{
+    background: transparent;
+    height: 10px;
+    margin: 0;
+    border-radius: 5px;
+}}
+
+QScrollBar::handle:horizontal {{
+    background: {C['surface2']};
+    border-radius: 5px;
+    min-width: 30px;
+    margin: 2px;
+}}
+
+QScrollBar::handle:horizontal:hover {{
+    background: {C['overlay1']};
+}}
+
+QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {{
+    width: 0;
+    background: none;
+}}
+
+QScrollBar::add-page:horizontal, QScrollBar::sub-page:horizontal {{
+    background: transparent;
+}}
+
+/* ============================================================
+   CARDS / PANELS
+   ============================================================ */
 #card {{
     background-color: {C['surface0']};
     border: 1px solid {C['surface1']};
@@ -220,56 +335,42 @@ QScrollBar::add-page:vertical, QScrollBar::sub-page:vertical {{
     border-color: {C['surface2']};
 }}
 
-/* Group box */
+/* ============================================================
+   GROUP BOX
+   ============================================================ */
 QGroupBox {{
     border: 1px solid {C['surface1']};
-    border-radius: 8px;
-    margin-top: 12px;
-    padding-top: 16px;
-    font-weight: bold;
+    border-radius: 10px;
+    margin-top: 14px;
+    padding: 20px 16px 16px 16px;
+    font-weight: 600;
     color: {C['subtext1']};
+    background-color: {C['surface0']};
 }}
 
 QGroupBox::title {{
     subcontrol-origin: margin;
-    left: 12px;
-    padding: 0 6px;
-}}
-
-/* Tab widget */
-QTabWidget::pane {{
-    border: 1px solid {C['surface1']};
-    border-radius: 8px;
-    background: {C['base']};
-}}
-
-QTabBar::tab {{
-    background: {C['surface0']};
-    color: {C['subtext0']};
-    border: none;
-    border-radius: 6px 6px 0 0;
-    padding: 8px 16px;
-    margin-right: 2px;
-}}
-
-QTabBar::tab:selected {{
-    background: {C['surface1']};
+    left: 14px;
+    padding: 0 8px;
     color: {C['mauve']};
 }}
 
-/* List / Table */
+/* ============================================================
+   LIST / TABLE
+   ============================================================ */
 QListWidget, QTableWidget {{
     background-color: {C['surface0']};
     color: {C['text']};
     border: 1px solid {C['surface1']};
-    border-radius: 8px;
+    border-radius: 10px;
     outline: none;
     padding: 4px;
 }}
 
 QListWidget::item, QTableWidget::item {{
-    padding: 8px;
+    padding: 10px 8px;
     border-radius: 6px;
+    border: none;
 }}
 
 QListWidget::item:selected, QTableWidget::item:selected {{
@@ -277,41 +378,68 @@ QListWidget::item:selected, QTableWidget::item:selected {{
     color: {C['mauve']};
 }}
 
+QListWidget::item:hover, QTableWidget::item:hover {{
+    background-color: {C['surface1']}88;
+}}
+
 QHeaderView::section {{
     background-color: {C['surface0']};
     color: {C['subtext1']};
     border: none;
-    border-bottom: 1px solid {C['surface1']};
-    padding: 8px;
-    font-weight: bold;
+    border-bottom: 2px solid {C['surface1']};
+    padding: 10px 8px;
+    font-weight: 700;
+    font-size: 12px;
 }}
 
-/* Check box */
+/* ============================================================
+   CHECKBOX
+   ============================================================ */
 QCheckBox {{
-    spacing: 8px;
+    spacing: 10px;
     color: {C['text']};
+    font-size: 13px;
 }}
 
 QCheckBox::indicator {{
-    width: 18px;
-    height: 18px;
-    border-radius: 4px;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
     border: 2px solid {C['surface2']};
     background: {C['surface0']};
 }}
 
+QCheckBox::indicator:hover {{
+    border-color: {C['overlay1']};
+}}
+
 QCheckBox::indicator:checked {{
-    background: {C['mauve']};
+    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+        stop:0 {C['mauve']}, stop:1 {C['blue']});
     border-color: {C['mauve']};
 }}
 
-/* Tool tip */
+/* ============================================================
+   TOOLTIP
+   ============================================================ */
 QToolTip {{
     background-color: {C['surface1']};
     color: {C['text']};
     border: 1px solid {C['surface2']};
-    border-radius: 6px;
-    padding: 6px 10px;
+    border-radius: 8px;
+    padding: 8px 12px;
     font-size: 12px;
+}}
+
+/* ============================================================
+   SCROLL AREA
+   ============================================================ */
+QScrollArea {{
+    border: none;
+    background: transparent;
+}}
+
+QScrollArea > QWidget > QWidget {{
+    background: transparent;
 }}
 """

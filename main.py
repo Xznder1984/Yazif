@@ -2,10 +2,10 @@ import sys
 import os
 from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QPushButton, QStackedWidget, QLabel, QSizePolicy, QFrame,
+    QPushButton, QStackedWidget, QLabel, QFrame, QGraphicsDropShadowEffect,
 )
-from PyQt6.QtCore import Qt, QSize, QUrl
-from PyQt6.QtGui import QIcon, QDesktopServices, QDragEnterEvent, QDropEvent
+from PyQt6.QtCore import Qt, QUrl, QSize
+from PyQt6.QtGui import QIcon, QDesktopServices, QDragEnterEvent, QDropEvent, QColor
 
 from styles import QSS
 from core.config import load_config, is_setup_complete, save_config
@@ -20,31 +20,22 @@ from pages.settings import SettingsPage
 
 
 SIDEBAR_ITEMS = [
-    ("search", "Search"),
-    ("simple", "Quick Download"),
-    ("advanced", "Advanced Download"),
-    ("music", "Music Organizer"),
-    ("downloads", "Downloads"),
-    ("settings", "Settings"),
+    ("search", "Search", "🔍"),
+    ("simple", "Quick Download", "⬇"),
+    ("advanced", "Advanced Download", "⚙"),
+    ("music", "Music Organizer", "🎵"),
+    ("downloads", "Downloads", "📁"),
 ]
-
-ICON_SVGS = {
-    "search": '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="8" cy="8" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M12 12L16 16" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
-    "simple": '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 3V13M9 13L5 9M9 13L13 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 15H15" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
-    "advanced": '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="6" stroke="currentColor" stroke-width="1.5"/><path d="M9 6V9L11 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-    "music": '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M12 2V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="12" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M12 2L6 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
-    "downloads": '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="2" y="3" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M6 8L9 11L12 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 4V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
-    "settings": '<svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M9 2V4M9 14V16M16 9H14M4 9H2M14 4L12.5 5.5M5.5 12.5L4 14M14 14L12.5 12.5M5.5 5.5L4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
-}
 
 
 class SidebarButton(QPushButton):
-    def __init__(self, key: str, label: str, parent=None):
-        super().__init__(label, parent)
+    def __init__(self, key: str, label: str, icon_char: str = "", parent=None):
+        display = f"  {icon_char}  {label}" if icon_char else label
+        super().__init__(display, parent)
         self.key = key
         self.setCheckable(True)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setFixedHeight(40)
+        self.setFixedHeight(42)
 
 
 class MainWindow(QMainWindow):
@@ -85,35 +76,65 @@ class MainWindow(QMainWindow):
         main_layout.setContentsMargins(0, 0, 0, 0)
         main_layout.setSpacing(0)
 
+        # ── Sidebar ──
         sidebar = QFrame()
         sidebar.setObjectName("sidebar")
-        sidebar.setFixedWidth(200)
+        sidebar.setFixedWidth(210)
         sidebar_layout = QVBoxLayout(sidebar)
-        sidebar_layout.setContentsMargins(8, 12, 8, 12)
-        sidebar_layout.setSpacing(4)
+        sidebar_layout.setContentsMargins(10, 16, 10, 16)
+        sidebar_layout.setSpacing(2)
 
-        brand = QLabel("Yazif")
+        brand = QLabel("YAZIF")
         brand.setObjectName("sidebarTitle")
-        brand.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        brand.setAlignment(Qt.AlignmentFlag.AlignLeft)
         sidebar_layout.addWidget(brand)
 
+        version = QLabel("v1.0.0")
+        version.setObjectName("sidebarVersion")
+        sidebar_layout.addWidget(version)
+
+        sep = QFrame()
+        sep.setObjectName("sidebarSeparator")
+        sep.setFrameShape(QFrame.Shape.HLine)
+        sidebar_layout.addWidget(sep)
+        sidebar_layout.addSpacing(6)
+
         self.nav_buttons = {}
-        for key, label in SIDEBAR_ITEMS:
-            btn = SidebarButton(key, label)
+        for key, label, icon in SIDEBAR_ITEMS:
+            btn = SidebarButton(key, label, icon)
             btn.clicked.connect(lambda checked, k=key: self._switch_page(k))
             sidebar_layout.addWidget(btn)
             self.nav_buttons[key] = btn
 
         sidebar_layout.addStretch()
 
-        help_btn = QPushButton("Help")
-        help_btn.setObjectName("secondaryBtn")
+        sep2 = QFrame()
+        sep2.setObjectName("sidebarSeparator")
+        sep2.setFrameShape(QFrame.Shape.HLine)
+        sidebar_layout.addWidget(sep2)
+        sidebar_layout.addSpacing(4)
+
+        settings_btn = SidebarButton("settings", "Settings", "⚙")
+        settings_btn.clicked.connect(lambda: self._switch_page("settings"))
+        self.nav_buttons["settings"] = settings_btn
+        sidebar_layout.addWidget(settings_btn)
+
+        help_btn = QPushButton("  ❓  Help")
+        help_btn.setObjectName("ghostBtn")
         help_btn.setCursor(Qt.CursorShape.PointingHandCursor)
+        help_btn.setFixedHeight(38)
         help_btn.clicked.connect(self._open_help)
         sidebar_layout.addWidget(help_btn)
 
+        shadow = QGraphicsDropShadowEffect()
+        shadow.setBlurRadius(20)
+        shadow.setColor(QColor(0, 0, 0, 60))
+        shadow.setOffset(2, 0)
+        sidebar.setGraphicsEffect(shadow)
+
         main_layout.addWidget(sidebar)
 
+        # ── Content area ──
         self.stack = QStackedWidget()
         main_layout.addWidget(self.stack, 1)
 
@@ -136,7 +157,6 @@ class MainWindow(QMainWindow):
             self.stack.addWidget(page)
 
         self.search_page.download_requested.connect(self._on_search_download)
-
         self._switch_page("search")
 
     def _switch_page(self, key: str):
@@ -158,7 +178,7 @@ class MainWindow(QMainWindow):
     def _check_ytdlp(self):
         ok, path = ensure_ytdlp_installed()
         if not ok:
-            self.downloads_page.log.append("yt-dlp not found — downloads may not work")
+            self.downloads_page.log.append("yt-dlp not found - downloads may not work")
 
     def dragEnterEvent(self, event: QDragEnterEvent):
         if event.mimeData().hasUrls():
