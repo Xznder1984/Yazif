@@ -28,7 +28,9 @@ jobs:
         run: python build.py
 
       - name: Create portable zip
-        run: Compress-Archive -Path dist\Yazif.exe -DestinationPath release\Yazif-Portable.zip
+        run: |
+          New-Item -ItemType Directory -Path release -Force
+          Compress-Archive -Path dist\Yazif.exe -DestinationPath release\Yazif-Portable.zip
 
       - name: Build NSIS installer
         run: makensis installer.nsi
