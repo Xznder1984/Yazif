@@ -51,7 +51,7 @@ class MusicOrganizerPage(QWidget):
         self.rename_thread = None
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(24, 24, 24, 24)
+        layout.setContentsMargins(28, 28, 28, 28)
         layout.setSpacing(16)
 
         title = QLabel("Music Organizer")
@@ -62,51 +62,69 @@ class MusicOrganizerPage(QWidget):
         desc.setObjectName("subheading")
         layout.addWidget(desc)
 
+        layout.addSpacing(4)
+
         folder_row = QHBoxLayout()
-        folder_row.setSpacing(8)
-        folder_row.addWidget(QLabel("Music folder:"))
+        folder_row.setSpacing(12)
+        folder_label = QLabel("Music folder:")
+        folder_label.setStyleSheet("font-weight: 600;")
+        folder_row.addWidget(folder_label)
         self.folder_input = QLineEdit()
         self.folder_input.setPlaceholderText("C:\\Users\\User\\Music")
+        self.folder_input.setFixedHeight(40)
         folder_row.addWidget(self.folder_input, 1)
 
         browse_btn = QPushButton("Browse")
         browse_btn.setObjectName("secondaryBtn")
-        browse_btn.setFixedWidth(80)
+        browse_btn.setFixedWidth(100)
+        browse_btn.setFixedHeight(40)
         browse_btn.clicked.connect(self._browse)
         folder_row.addWidget(browse_btn)
         layout.addLayout(folder_row)
 
         stats_card = QFrame()
         stats_card.setObjectName("card")
+        stats_card.setFixedHeight(70)
         stats_layout = QVBoxLayout(stats_card)
+        stats_layout.setContentsMargins(18, 12, 18, 12)
         self.stats_label = QLabel("Click Scan to analyze your music library")
         self.stats_label.setObjectName("subheading")
         stats_layout.addWidget(self.stats_label)
         layout.addWidget(stats_card)
 
-        btn_row = QHBoxLayout()
-        btn_row.setSpacing(8)
+        layout.addSpacing(4)
 
-        scan_btn = QPushButton("Scan")
+        btn_row = QHBoxLayout()
+        btn_row.setSpacing(12)
+
+        scan_btn = QPushButton("  Scan  ")
         scan_btn.setObjectName("secondaryBtn")
+        scan_btn.setFixedHeight(40)
+        scan_btn.setMinimumWidth(110)
         scan_btn.clicked.connect(self._scan)
         btn_row.addWidget(scan_btn)
 
-        org_btn = QPushButton("Organize by Artist/Album")
+        org_btn = QPushButton("  Organize  ")
+        org_btn.setFixedHeight(40)
+        org_btn.setMinimumWidth(140)
         org_btn.clicked.connect(self._organize)
         btn_row.addWidget(org_btn)
 
-        rename_btn = QPushButton("AI Rename")
+        rename_btn = QPushButton("  AI Rename  ")
         rename_btn.setObjectName("secondaryBtn")
+        rename_btn.setFixedHeight(40)
+        rename_btn.setMinimumWidth(130)
         rename_btn.clicked.connect(self._ai_rename)
         btn_row.addWidget(rename_btn)
 
         btn_row.addStretch()
         layout.addLayout(btn_row)
 
+        layout.addSpacing(4)
+
         self.progress_bar = QProgressBar()
         self.progress_bar.setValue(0)
-        self.progress_bar.setFixedHeight(8)
+        self.progress_bar.setFixedHeight(12)
         layout.addWidget(self.progress_bar)
 
         self.log = QTextEdit()

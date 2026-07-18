@@ -13,25 +13,34 @@ class SettingsPage(QWidget):
         self.on_config_saved = on_config_saved
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(24, 24, 24, 24)
+        layout.setContentsMargins(28, 28, 28, 28)
         layout.setSpacing(16)
 
         title = QLabel("Settings")
         title.setObjectName("heading")
         layout.addWidget(title)
 
+        desc = QLabel("Configure your download preferences")
+        desc.setObjectName("subheading")
+        layout.addWidget(desc)
+
+        layout.addSpacing(4)
+
         dl_group = QGroupBox("Download")
         dl_form = QFormLayout(dl_group)
-        dl_form.setSpacing(12)
+        dl_form.setSpacing(14)
 
         path_row = QHBoxLayout()
+        path_row.setSpacing(12)
         self.path_input = QLineEdit()
         self.path_input.setText(self.cfg.get("download_path", ""))
         self.path_input.setReadOnly(True)
+        self.path_input.setFixedHeight(40)
         path_row.addWidget(self.path_input, 1)
         browse = QPushButton("Browse")
         browse.setObjectName("secondaryBtn")
-        browse.setFixedWidth(80)
+        browse.setFixedWidth(100)
+        browse.setFixedHeight(40)
         browse.clicked.connect(self._browse_path)
         path_row.addWidget(browse)
         dl_form.addRow("Download folder:", path_row)
@@ -44,12 +53,13 @@ class SettingsPage(QWidget):
 
         api_group = QGroupBox("NVIDIA NIM API")
         api_form = QFormLayout(api_group)
-        api_form.setSpacing(12)
+        api_form.setSpacing(14)
 
         self.api_input = QLineEdit()
         self.api_input.setPlaceholderText("nvapi-...")
         self.api_input.setEchoMode(QLineEdit.EchoMode.Password)
         self.api_input.setText(self.cfg.get("nvidia_api_key", ""))
+        self.api_input.setFixedHeight(40)
         api_form.addRow("API Key:", self.api_input)
 
         api_link = QLabel('<a href="https://build.nvidia.com" style="color: #89b4fa;">Get free key at build.nvidia.com</a>')
@@ -60,10 +70,14 @@ class SettingsPage(QWidget):
 
         fmt_group = QGroupBox("Default Format Settings")
         fmt_form = QFormLayout(fmt_group)
-        fmt_form.setSpacing(12)
+        fmt_form.setSpacing(14)
         layout.addWidget(fmt_group)
 
-        save_btn = QPushButton("Save Settings")
+        layout.addSpacing(8)
+
+        save_btn = QPushButton("  Save Settings  ")
+        save_btn.setFixedHeight(44)
+        save_btn.setMinimumWidth(160)
         save_btn.clicked.connect(self._save)
         layout.addWidget(save_btn)
 

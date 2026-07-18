@@ -35,7 +35,7 @@ class SidebarButton(QPushButton):
         self.key = key
         self.setCheckable(True)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
-        self.setFixedHeight(42)
+        self.setFixedHeight(46)
 
 
 class MainWindow(QMainWindow):
@@ -79,9 +79,9 @@ class MainWindow(QMainWindow):
         # ── Sidebar ──
         sidebar = QFrame()
         sidebar.setObjectName("sidebar")
-        sidebar.setFixedWidth(210)
+        sidebar.setFixedWidth(230)
         sidebar_layout = QVBoxLayout(sidebar)
-        sidebar_layout.setContentsMargins(10, 16, 10, 16)
+        sidebar_layout.setContentsMargins(12, 20, 12, 20)
         sidebar_layout.setSpacing(2)
 
         brand = QLabel("YAZIF")
@@ -97,7 +97,7 @@ class MainWindow(QMainWindow):
         sep.setObjectName("sidebarSeparator")
         sep.setFrameShape(QFrame.Shape.HLine)
         sidebar_layout.addWidget(sep)
-        sidebar_layout.addSpacing(6)
+        sidebar_layout.addSpacing(8)
 
         self.nav_buttons = {}
         for key, label, icon in SIDEBAR_ITEMS:
@@ -112,7 +112,7 @@ class MainWindow(QMainWindow):
         sep2.setObjectName("sidebarSeparator")
         sep2.setFrameShape(QFrame.Shape.HLine)
         sidebar_layout.addWidget(sep2)
-        sidebar_layout.addSpacing(4)
+        sidebar_layout.addSpacing(6)
 
         settings_btn = SidebarButton("settings", "Settings", "⚙")
         settings_btn.clicked.connect(lambda: self._switch_page("settings"))
@@ -122,7 +122,7 @@ class MainWindow(QMainWindow):
         help_btn = QPushButton("  ❓  Help")
         help_btn.setObjectName("ghostBtn")
         help_btn.setCursor(Qt.CursorShape.PointingHandCursor)
-        help_btn.setFixedHeight(38)
+        help_btn.setFixedHeight(42)
         help_btn.clicked.connect(self._open_help)
         sidebar_layout.addWidget(help_btn)
 

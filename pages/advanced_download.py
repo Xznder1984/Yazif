@@ -18,7 +18,7 @@ class AdvancedDownloadPage(QWidget):
         self.ytdlp = find_ytdlp()
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(24, 24, 24, 24)
+        layout.setContentsMargins(28, 28, 28, 28)
         layout.setSpacing(16)
 
         title = QLabel("Advanced Download")
@@ -29,17 +29,23 @@ class AdvancedDownloadPage(QWidget):
         desc.setObjectName("subheading")
         layout.addWidget(desc)
 
+        layout.addSpacing(4)
+
         url_row = QHBoxLayout()
-        url_row.setSpacing(8)
+        url_row.setSpacing(12)
         self.url_input = QLineEdit()
         self.url_input.setPlaceholderText("https://www.youtube.com/watch?v=...")
+        self.url_input.setFixedHeight(44)
         url_row.addWidget(self.url_input)
 
-        self.dl_btn = QPushButton("Download")
-        self.dl_btn.setFixedWidth(110)
+        self.dl_btn = QPushButton("  Download  ")
+        self.dl_btn.setFixedWidth(130)
+        self.dl_btn.setFixedHeight(44)
         self.dl_btn.clicked.connect(self._start_download)
         url_row.addWidget(self.dl_btn)
         layout.addLayout(url_row)
+
+        layout.addSpacing(4)
 
         args_label = QLabel("Extra yt-dlp arguments:")
         args_label.setObjectName("subheading")
@@ -54,27 +60,36 @@ class AdvancedDownloadPage(QWidget):
             "# --playlist-items 1:5\n"
             "# --cookies-from-browser chrome"
         )
-        self.args_input.setFixedHeight(100)
+        self.args_input.setFixedHeight(110)
         layout.addWidget(self.args_input)
 
+        layout.addSpacing(4)
+
         out_row = QHBoxLayout()
-        out_row.setSpacing(8)
-        out_row.addWidget(QLabel("Save to:"))
+        out_row.setSpacing(12)
+        out_label = QLabel("Save to:")
+        out_label.setStyleSheet("font-weight: 600;")
+        out_row.addWidget(out_label)
+
         self.path_input = QLineEdit()
         self.path_input.setText(self.cfg.get("download_path", ""))
         self.path_input.setReadOnly(True)
+        self.path_input.setFixedHeight(40)
         out_row.addWidget(self.path_input, 1)
 
         browse_btn = QPushButton("Browse")
         browse_btn.setObjectName("secondaryBtn")
-        browse_btn.setFixedWidth(80)
+        browse_btn.setFixedWidth(100)
+        browse_btn.setFixedHeight(40)
         browse_btn.clicked.connect(self._browse_folder)
         out_row.addWidget(browse_btn)
         layout.addLayout(out_row)
 
+        layout.addSpacing(8)
+
         self.progress_bar = QProgressBar()
         self.progress_bar.setValue(0)
-        self.progress_bar.setFixedHeight(8)
+        self.progress_bar.setFixedHeight(12)
         layout.addWidget(self.progress_bar)
 
         self.status_label = QLabel("Ready")
@@ -102,7 +117,7 @@ class AdvancedDownloadPage(QWidget):
         extra = "\n".join(l for l in extra.splitlines() if l.strip() and not l.strip().startswith("#"))
 
         self.dl_btn.setEnabled(False)
-        self.dl_btn.setText("Downloading...")
+        self.dl_btn.setText(" ... ")
         self.progress_bar.setValue(0)
         self.status_label.setText("Starting download...")
         self.download_started.emit(url)
@@ -120,13 +135,13 @@ class AdvancedDownloadPage(QWidget):
 
     def _on_done(self, info: dict):
         self.dl_btn.setEnabled(True)
-        self.dl_btn.setText("Download")
+        self.dl_btn.setText("  Download  ")
         self.progress_bar.setValue(100)
         self.status_label.setText("Download complete!")
         self.download_finished.emit(info)
 
     def _on_error(self, err: str):
         self.dl_btn.setEnabled(True)
-        self.dl_btn.setText("Download")
+        self.dl_btn.setText("  Download  ")
         self.progress_bar.setValue(0)
         self.status_label.setText(f"Error: {err}")

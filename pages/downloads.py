@@ -13,18 +13,18 @@ class DownloadItemCard(QFrame):
         super().__init__(parent)
         self.filepath = filepath
         self.setObjectName("card")
-        self.setFixedHeight(60)
+        self.setFixedHeight(68)
         self.setCursor(Qt.CursorShape.PointingHandCursor)
 
         layout = QHBoxLayout(self)
-        layout.setContentsMargins(12, 8, 12, 8)
-        layout.setSpacing(12)
+        layout.setContentsMargins(16, 10, 16, 10)
+        layout.setSpacing(14)
 
         name = os.path.basename(filepath)
         ext = os.path.splitext(name)[1].lower()
 
         icon_label = QLabel(ext.upper().replace(".", "") if ext else "FILE")
-        icon_label.setFixedSize(36, 36)
+        icon_label.setFixedSize(40, 40)
         icon_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         colors = {
             ".mp4": "#89b4fa", ".mkv": "#89b4fa", ".webm": "#89b4fa",
@@ -32,12 +32,14 @@ class DownloadItemCard(QFrame):
             ".m4a": "#a6e3a1", ".ogg": "#a6e3a1",
         }
         c = colors.get(ext, "#9399b2")
-        icon_label.setStyleSheet(f"background: {c}22; color: {c}; border-radius: 6px; font-weight: bold; font-size: 10px;")
+        icon_label.setStyleSheet(f"background: {c}22; color: {c}; border-radius: 8px; font-weight: bold; font-size: 11px;")
         layout.addWidget(icon_label)
 
         info = QVBoxLayout()
-        info.setSpacing(2)
-        info.addWidget(QLabel(name))
+        info.setSpacing(3)
+        name_label = QLabel(name)
+        name_label.setStyleSheet("font-weight: 600; font-size: 13px;")
+        info.addWidget(name_label)
         size = ""
         try:
             s = os.path.getsize(filepath)
@@ -50,17 +52,18 @@ class DownloadItemCard(QFrame):
         size_label = QLabel(size)
         size_label.setObjectName("muted")
         info.addWidget(size_label)
+        info.addStretch()
         layout.addLayout(info, 1)
 
         open_btn = QPushButton("Open")
         open_btn.setObjectName("secondaryBtn")
-        open_btn.setFixedWidth(60)
+        open_btn.setFixedSize(80, 34)
         open_btn.clicked.connect(self._open_file)
         layout.addWidget(open_btn)
 
         folder_btn = QPushButton("Folder")
         folder_btn.setObjectName("secondaryBtn")
-        folder_btn.setFixedWidth(60)
+        folder_btn.setFixedSize(80, 34)
         folder_btn.clicked.connect(self._open_folder)
         layout.addWidget(folder_btn)
 
@@ -79,7 +82,7 @@ class DownloadsPage(QWidget):
         super().__init__(parent)
 
         layout = QVBoxLayout(self)
-        layout.setContentsMargins(24, 24, 24, 24)
+        layout.setContentsMargins(28, 28, 28, 28)
         layout.setSpacing(16)
 
         header = QHBoxLayout()
@@ -88,12 +91,19 @@ class DownloadsPage(QWidget):
         header.addWidget(title)
         header.addStretch()
 
-        refresh_btn = QPushButton("Refresh")
+        refresh_btn = QPushButton("  Refresh  ")
         refresh_btn.setObjectName("secondaryBtn")
-        refresh_btn.setFixedWidth(80)
+        refresh_btn.setFixedHeight(38)
+        refresh_btn.setMinimumWidth(100)
         refresh_btn.clicked.connect(self.refresh)
         header.addWidget(refresh_btn)
         layout.addLayout(header)
+
+        desc = QLabel("Your downloaded files appear here")
+        desc.setObjectName("subheading")
+        layout.addWidget(desc)
+
+        layout.addSpacing(4)
 
         scroll = QScrollArea()
         scroll.setWidgetResizable(True)
