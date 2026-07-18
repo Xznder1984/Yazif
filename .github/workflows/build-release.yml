@@ -27,11 +27,20 @@ jobs:
       - name: Build executable
         run: python build.py
 
+      - name: Create portable zip
+        run: Compress-Archive -Path dist\Yazif.exe -DestinationPath release\Yazif-Portable.zip
+
+      - name: Build NSIS installer
+        run: makensis installer.nsi
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: yazif-windows
-          path: dist/Yazif.exe
+          path: |
+            dist/Yazif.exe
+            release/Yazif-Portable.zip
+            Yazif-Setup.exe
           if-no-files-found: error
 
   release:
@@ -49,7 +58,10 @@ jobs:
         with:
           tag_name: v1.0.0
           name: Yazif v1.0.0
-          files: artifacts/Yazif.exe
+          files: |
+            artifacts/Yazif.exe
+            artifacts/Yazif-Portable.zip
+            artifacts/Yazif-Setup.exe
           draft: false
           prerelease: false
           generate_release_notes: true
